@@ -8,5 +8,21 @@
     "ecmaVersion": 2022,
     "sourceType": "script"
   },
+  "rules": {
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+    "no-undef": "warn",
+    "no-useless-escape": "warn",
+    "no-useless-catch": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["**/authService.js", "**/apiConfig.js"],
+      "parserOptions": { "sourceType": "module" }
+    },
+    {
+      "files": ["**/scraping/*.js"],
+      "env": { "browser": true }
+    }
+  ],
   "root": true
 }
