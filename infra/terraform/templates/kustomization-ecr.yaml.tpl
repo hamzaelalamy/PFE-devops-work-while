@@ -9,8 +9,8 @@ resources:
 
 images:
   - name: workwhile-backend
-    newName: 772200096303.dkr.ecr.us-east-1.amazonaws.com/workwhile-dev-backend
+    newName: ${ecr_backend_url}
     newTag: latest
   - name: workwhile-frontend
-    newName: 772200096303.dkr.ecr.us-east-1.amazonaws.com/workwhile-dev-frontend
+    newName: ${ecr_frontend_url}
     newTag: latest

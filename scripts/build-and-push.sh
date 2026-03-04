@@ -1,17 +1,27 @@
 #!/bin/bash
 # Build and push Docker images to ECR
-# Usage: ./scripts/build-and-push.sh <aws-account-id> <aws-region>
-# Prereqs: AWS CLI configured, docker logged in to ECR (aws ecr get-login-password)
+# Usage: ./scripts/build-and-push.sh
+# Optional env vars:
+#   AWS_ACCOUNT_ID  - AWS account ID (if not set, script will detect via STS)
+#   AWS_REGION      - AWS region (default: us-east-1)
+#   IMAGE_TAG       - Docker image tag (default: latest)
+# Prereqs: AWS CLI configured, Docker daemon running
 
 set -e
 
-AWS_ACCOUNT_ID="${1:-}"
-AWS_REGION="${2:-us-east-1}"
-IMAGE_TAG="${3:-latest}"
+AWS_REGION="${AWS_REGION:-us-east-1}"
+IMAGE_TAG="${IMAGE_TAG:-latest}"
+
+# Allow overriding via env, otherwise detect from STS
+AWS_ACCOUNT_ID="${AWS_ACCOUNT_ID:-$1}"
 
 if [ -z "$AWS_ACCOUNT_ID" ]; then
-  echo "Usage: $0 <aws-account-id> [aws-region] [image-tag]"
-  echo "Example: $0 123456789012 us-east-1 latest"
+  AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text 2>/dev/null || true)"
+fi
+
+if [ -z "$AWS_ACCOUNT_ID" ]; then
+  echo "ERROR: Could not determine AWS account ID."
+  echo "Set AWS_ACCOUNT_ID env var or configure AWS CLI credentials."
   exit 1
 fi
 

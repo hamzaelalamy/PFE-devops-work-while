@@ -27,7 +27,8 @@ variable "cluster_version" {
 variable "node_instance_types" {
   type        = list(string)
   description = "EC2 instance types for EKS node group"
-  default     = ["t3.medium"]
+  # Use a free-tier-eligible instance type to avoid billing issues
+  default     = ["t3.micro"]
 }
 
 variable "node_desired_size" {
@@ -44,4 +45,10 @@ variable "node_min_size" {
 variable "node_max_size" {
   type        = number
   default     = 4
+}
+
+variable "run_build_and_deploy" {
+  type        = bool
+  default     = true
+  description = "If true, after infra is created Terraform will build/push Docker images and deploy to EKS (requires Docker and kubectl). Set to false to skip (e.g. CI does it separately)."
 }

@@ -41,8 +41,9 @@ After apply:
 - `ecr_frontend_url` - Push frontend image here
 - `configure_kubectl` - Run to configure kubectl for the cluster
 
-## Deploy to EKS
+## ECR overlay and deploy (no manual scripts)
 
-1. Configure kubectl: `aws eks update-kubeconfig --region us-east-1 --name workwhile-dev`
-2. Update `k8s/overlays/ecr/kustomization.yaml` with ECR URLs from `terraform output`
-3. Apply: `kubectl apply -k k8s/overlays/ecr/`
+- **Kustomization**: Terraform writes `k8s/overlays/ecr/kustomization.yaml` with the correct ECR URLs for this account, so you never edit that file by hand.
+- **Build + deploy**: If `run_build_and_deploy` is `true` (default), after infra is created Terraform runs a generated script that: logs in to ECR, builds and pushes backend/frontend images, updates kubeconfig, and runs `kubectl apply -k k8s/overlays/ecr/`. Requires Docker and `kubectl` where Terraform runs (e.g. WSL or CI).
+- To skip the automatic build/deploy (e.g. CI does it), set in your tfvars: `run_build_and_deploy = false`.
+- After destroy + re-apply, the overlay is regenerated and build+deploy runs again.
