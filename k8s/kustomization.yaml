@@ -1,0 +1,7 @@
+# Apply with: kubectl apply -k k8s/
+# For ECR images (EKS): kubectl apply -k k8s/overlays/ecr/
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - base

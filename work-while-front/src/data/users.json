@@ -1,0 +1,84 @@
+{
+  "users": [
+    {
+    "id": 1,
+    "username": "johndoe",
+    "email": "john@example.com",
+    "password": "password123",
+    "name": "John Doe",
+    "company": "ABC Corp",
+    "role": "recruiter",
+    "savedJobs": [3, 5, 8]
+    },
+    {
+    "id": 2,
+    "username": "janedoe",
+    "email": "jane@example.com",
+    "password": "pass456",
+    "name": "Jane Doe",
+    "company": "XYZ Ltd",
+    "role": "recruiter",
+    "savedJobs": [1, 4]
+    },
+    {
+    "id": 3,
+    "username": "mikebrown",
+    "email": "mike@example.com",
+    "password": "secure789",
+    "name": "Mike Brown",
+    "company": "Tech Solutions",
+    "role": "recruiter",
+    "savedJobs": [2, 7]
+    },
+    {
+    "id": 4,
+    "username": "sarahsmith",
+    "email": "sarah@example.com",
+    "password": "sarah123",
+    "name": "Sarah Smith",
+    "company": "Global Hire",
+    "role": "recruiter",
+    "savedJobs": [6, 9]
+    },
+    {
+    "id": 5,
+    "username": "alexwilson",
+    "email": "alex@example.com",
+    "password": "alexpass",
+    "name": "Alex Wilson",
+    "role": "jobseeker",
+    "skills": ["JavaScript", "React", "Node.js"],
+    "savedJobs": [2, 5, 7]
+    },
+    {
+    "id": 6,
+    "username": "emilyjohnson",
+    "email": "emily@example.com",
+    "password": "emilyj456",
+    "name": "Emily Johnson",
+    "role": "jobseeker",
+    "skills": ["Python", "Data Analysis", "SQL"],
+    "savedJobs": [1, 3, 8]
+    },
+    {
+    "id": 7,
+    "username": "oussama",
+    "email": "oussama@oussama.com",
+    "password": "oussama",
+    "name": "Robert Lee",
+    "role": "jobseeker",
+    "skills": ["UX Design", "Adobe XD", "Figma"],
+    "savedJobs": [4, 9]
+    },
+    {
+    "id": 8,
+    "username": "linapark",
+    "email": "lina@example.com",
+    "password": "linapark123",
+    "name": "Lina Park",
+    "role": "recruiter",
+    "company": "Talent Hub",
+    "savedJobs": [3, 5]
+    }
+  ]
+  }

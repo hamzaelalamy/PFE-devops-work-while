@@ -1,0 +1,84 @@
+# ============================================
+# WorkWhile - Docker Compose
+# ============================================
+# Full stack: MongoDB, Backend API, Frontend (Nginx)
+#
+# Usage:
+#   docker compose up -d          # Start all services
+#   docker compose up -d --build  # Rebuild and start
+#   docker compose down           # Stop and remove
+#   docker compose logs -f        # Follow logs
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: workwhile-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: workwhile
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - workwhile-network
+
+  backend:
+    build:
+      context: ./work-while-backend
+      dockerfile: Dockerfile
+    container_name: workwhile-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - backend_uploads:/app/uploads
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      HOST: 0.0.0.0
+      MONGODB_URI: mongodb://mongodb:27017/workwhile
+      JWT_SECRET: ${JWT_SECRET:-change-this-in-production-use-secure-random-string}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-change-this-too-use-secure-random-string}
+      JWT_EXPIRE: ${JWT_EXPIRE:-24h}
+      JWT_REFRESH_EXPIRE: ${JWT_REFRESH_EXPIRE:-7d}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      BACKEND_URL: ${BACKEND_URL:-http://localhost:5000}
+      PUPPETEER_HEADLESS: "true"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - workwhile-network
+
+  frontend:
+    build:
+      context: ./work-while-front
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+    container_name: workwhile-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - workwhile-network
+
+volumes:
+  mongodb_data:
+    name: workwhile-mongodb-data
+  backend_uploads:
+    name: workwhile-backend-uploads
+
+networks:
+  workwhile-network:
+    name: workwhile-network
+    driver: bridge

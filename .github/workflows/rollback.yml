@@ -1,0 +1,43 @@
+name: Rollback Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: 'Revision to rollback to (leave empty for previous)'
+        required: false
+        default: '0'
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name workwhile-dev
+
+      - name: Rollback backend
+        run: |
+          REVISION=${{ github.event.inputs.revision }}
+          if [ -z "$REVISION" ] || [ "$REVISION" = "0" ]; then
+            kubectl rollout undo deployment/backend -n workwhile
+          else
+            kubectl rollout undo deployment/backend -n workwhile --to-revision=$REVISION
+          fi
+          kubectl rollout status deployment/backend -n workwhile --timeout=5m
+
+      - name: Rollback frontend
+        run: |
+          REVISION=${{ github.event.inputs.revision }}
+          if [ -z "$REVISION" ] || [ "$REVISION" = "0" ]; then
+            kubectl rollout undo deployment/frontend -n workwhile
+          else
+            kubectl rollout undo deployment/frontend -n workwhile --to-revision=$REVISION
+          fi
+          kubectl rollout status deployment/frontend -n workwhile --timeout=5m

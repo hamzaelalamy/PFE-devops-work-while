@@ -1,0 +1,7 @@
+# For first-time setup without S3 backend, rename to backend.tf
+# and comment out the S3 backend block in backend.tf
+terraform {
+  backend "local" {
+    path = "terraform.tfstate"
+  }
+}

@@ -1,0 +1,32 @@
+# Ingress for external access
+# Requires an Ingress controller (nginx-ingress, traefik, etc.)
+# For minikube: minikube addons enable ingress
+# For kind: install nginx-ingress or use NodePort/LoadBalancer instead
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: workwhile-ingress
+  namespace: workwhile
+  annotations:
+    # Common annotations (adjust for your ingress controller)
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: workwhile.local  # Use localhost for minikube: add 127.0.0.1 workwhile.local to /etc/hosts
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+  # Uncomment for TLS (HTTPS)
+  # tls:
+  #   - hosts:
+  #       - workwhile.local
+  #     secretName: workwhile-tls

@@ -1,0 +1,21 @@
+# Alternative: Expose frontend via NodePort for local access
+# Use instead of frontend-service when you want simple port forwarding without Ingress
+# Apply: kubectl apply -f k8s/frontend-service-nodeport.yaml
+# Access: kubectl port-forward svc/frontend 8080:80 -n workwhile
+# Or with minikube: minikube service frontend -n workwhile
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: workwhile
+  labels:
+    app: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
+      name: http
+  type: NodePort

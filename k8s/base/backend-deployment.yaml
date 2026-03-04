@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: workwhile
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: workwhile-backend:latest
+          imagePullPolicy: Always  # Always pull for registry images
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGODB_URI
+              value: "mongodb://mongodb:27017/workwhile"
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: workwhile-config
+                  key: NODE_ENV
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: workwhile-config
+                  key: PORT
+            - name: HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: workwhile-config
+                  key: HOST
+            - name: JWT_EXPIRE
+              valueFrom:
+                configMapKeyRef:
+                  name: workwhile-config
+                  key: JWT_EXPIRE
+            - name: JWT_REFRESH_EXPIRE
+              valueFrom:
+                configMapKeyRef:
+                  name: workwhile-config
+                  key: JWT_REFRESH_EXPIRE
+            - name: FRONTEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: workwhile-config
+                  key: FRONTEND_URL
+            - name: BACKEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: workwhile-config
+                  key: BACKEND_URL
+            - name: PUPPETEER_HEADLESS
+              valueFrom:
+                configMapKeyRef:
+                  name: workwhile-config
+                  key: PUPPETEER_HEADLESS
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: workwhile-secrets
+                  key: JWT_SECRET
+            - name: JWT_REFRESH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: workwhile-secrets
+                  key: JWT_REFRESH_SECRET
+          volumeMounts:
+            - name: uploads
+              mountPath: /app/uploads
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+      volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: backend-uploads-pvc

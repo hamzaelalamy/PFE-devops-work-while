@@ -1,0 +1,19 @@
+# ECR overlay - use when deploying to EKS with images from ECR
+# 1. Update the newName values below with your ECR URLs (from Terraform output)
+# 2. Apply: kubectl apply -k k8s/overlays/ecr/
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: workwhile
+
+resources:
+  - ../../base
+
+# Replace 123456789012 with your AWS account ID (terraform output)
+images:
+  - name: workwhile-backend
+    newName: 123456789012.dkr.ecr.us-east-1.amazonaws.com/workwhile-dev-backend
+    newTag: latest
+  - name: workwhile-frontend
+    newName: 123456789012.dkr.ecr.us-east-1.amazonaws.com/workwhile-dev-frontend
+    newTag: latest
