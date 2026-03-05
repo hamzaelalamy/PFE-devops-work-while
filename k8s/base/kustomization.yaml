@@ -5,7 +5,7 @@ namespace: workwhile
 
 resources:
   - namespace.yaml
-  - secret.yaml
+  # secret.yaml is gitignored; created by CI/CD before kubectl apply (see .github/workflows/ci-cd.yml)
   - configmap.yaml
   - mongodb-pvc.yaml
   - mongodb-deployment.yaml
