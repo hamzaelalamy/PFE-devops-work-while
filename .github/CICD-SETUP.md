@@ -12,6 +12,7 @@
 2. Create an IAM role with trust policy allowing `sts:AssumeRoleWithWebIdentity` from your GitHub repo.
 3. Attach policies: `AmazonEC2ContainerRegistryPowerUser`, `eks:DescribeCluster`, and a policy allowing `eks:AccessEntry` / kubeconfig access.
 4. Add the role ARN as `AWS_ROLE_ARN` secret.
+5. **Grant the role EKS access**: In Terraform, set `github_oidc_role_arn` (e.g. in `infra/terraform/environments/dev.tfvars`) to the same role ARN, then run `terraform apply`. This creates an EKS access entry so the deploy job can run `kubectl` against the cluster.
 
 ### Alternative: Static Credentials
 
