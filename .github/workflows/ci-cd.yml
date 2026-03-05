@@ -55,6 +55,9 @@ jobs:
     needs: ci
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    permissions:
+      id-token: write
+      contents: read
     outputs:
       image_tag: ${{ steps.meta.outputs.tags }}
     steps:
@@ -101,6 +104,9 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    permissions:
+      id-token: write
+      contents: read
     environment: production
     steps:
       - uses: actions/checkout@v4
