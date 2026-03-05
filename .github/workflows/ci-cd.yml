@@ -139,29 +139,38 @@ jobs:
           echo "ecr_url=${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com" >> $GITHUB_OUTPUT
 
       - name: Deploy to EKS
+        id: deploy
         run: |
+          set -e
           ECR_URL=${{ steps.ecr.outputs.ecr_url }}
           cd k8s/overlays/ecr
           kustomize edit set image workwhile-backend=$ECR_URL/$ECR_BACKEND_REPO:latest
           kustomize edit set image workwhile-frontend=$ECR_URL/$ECR_FRONTEND_REPO:latest
           cd ${{ github.workspace }}
           kubectl apply -k k8s/overlays/ecr/
-          echo "Waiting for MongoDB..."
-          kubectl rollout status deployment/mongodb -n workwhile --timeout=5m
-          echo "Waiting for backend..."
-          kubectl rollout status deployment/backend -n workwhile --timeout=10m
-          echo "Waiting for frontend..."
-          kubectl rollout status deployment/frontend -n workwhile --timeout=5m
+          set +e
+          ROLLOUT_FAILED=0
+          echo "Waiting for MongoDB (timeout 8m)..."
+          kubectl rollout status deployment/mongodb -n workwhile --timeout=8m || ROLLOUT_FAILED=1
+          echo "Waiting for backend (timeout 10m)..."
+          kubectl rollout status deployment/backend -n workwhile --timeout=10m || ROLLOUT_FAILED=1
+          echo "Waiting for frontend (timeout 5m)..."
+          kubectl rollout status deployment/frontend -n workwhile --timeout=5m || ROLLOUT_FAILED=1
           git checkout k8s/overlays/ecr/kustomization.yaml
+          if [ "$ROLLOUT_FAILED" = "1" ]; then echo "rollout_failed=true" >> $GITHUB_OUTPUT; exit 1; fi
 
-      - name: Debug rollout failure
-        if: failure()
+      - name: Debug rollout (pods and logs)
+        if: failure() && steps.deploy.outcome == 'failure'
         run: |
           echo "=== Pods in workwhile ==="
           kubectl get pods -n workwhile -o wide
+          echo "=== MongoDB deployment ==="
+          kubectl describe deployment mongodb -n workwhile
           echo "=== Backend deployment ==="
           kubectl describe deployment backend -n workwhile
-          echo "=== Backend pod logs (last 100 lines) ==="
-          kubectl logs -n workwhile -l app=backend --tail=100 --all-containers=true
-          echo "=== MongoDB pod logs (last 50 lines) ==="
-          kubectl logs -n workwhile -l app=mongodb --tail=50 --all-containers=true
+          echo "=== Events (workwhile namespace) ==="
+          kubectl get events -n workwhile --sort-by='.lastTimestamp'
+          echo "=== MongoDB pod logs ==="
+          kubectl logs -n workwhile -l app=mongodb --tail=80 --all-containers=true || true
+          echo "=== Backend pod logs ==="
+          kubectl logs -n workwhile -l app=backend --tail=80 --all-containers=true || true

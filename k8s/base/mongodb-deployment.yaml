@@ -25,8 +25,8 @@ spec:
               mountPath: /data/db
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "100m"
+              memory: "200Mi"
+              cpu: "50m"
             limits:
               memory: "512Mi"
               cpu: "500m"
@@ -36,18 +36,18 @@ spec:
                 - mongosh
                 - --eval
                 - "db.adminCommand('ping')"
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            timeoutSeconds: 10
           readinessProbe:
             exec:
               command:
                 - mongosh
                 - --eval
                 - "db.adminCommand('ping')"
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            timeoutSeconds: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
       volumes:
         - name: mongodb-data
           persistentVolumeClaim:

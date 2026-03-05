@@ -28,7 +28,7 @@ variable "node_instance_types" {
   type        = list(string)
   description = "EC2 instance types for EKS node group"
   # Use a free-tier-eligible instance type to avoid billing issues
-  default     = ["t3.micro"]
+  default     = ["t3.small"]
 }
 
 variable "node_desired_size" {
