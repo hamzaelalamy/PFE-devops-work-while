@@ -47,3 +47,8 @@ After apply:
 - **Build + deploy**: If `run_build_and_deploy` is `true` (default), after infra is created Terraform runs a generated script that: logs in to ECR, builds and pushes backend/frontend images, updates kubeconfig, and runs `kubectl apply -k k8s/overlays/ecr/`. Requires Docker and `kubectl` where Terraform runs (e.g. WSL or CI).
 - To skip the automatic build/deploy (e.g. CI does it), set in your tfvars: `run_build_and_deploy = false`.
 - After destroy + re-apply, the overlay is regenerated and build+deploy runs again.
+
+## EBS CSI and node capacity
+
+- **EBS CSI driver**: Terraform installs the `aws-ebs-csi-driver` add-on with IRSA so PVCs (MongoDB, backend uploads) can provision EBS volumes. Apply Terraform to add it if your pods were Pending with "didn't find available persistent volumes to bind".
+- **Too many pods**: With 2× `t3.micro` nodes you have limited pod capacity. If you see "Too many pods" when scheduling, increase capacity: set `node_desired_size = 3` or use a larger instance type (e.g. `node_instance_types = ["t3.small"]`) in your tfvars, then `terraform apply`.
