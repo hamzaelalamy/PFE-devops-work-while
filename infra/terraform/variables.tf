@@ -1,3 +1,7 @@
+# ============================================
+# Root Variables
+# ============================================
+
 variable "project_name" {
   type    = string
   default = "workwhile"
@@ -27,7 +31,6 @@ variable "cluster_version" {
 variable "node_instance_types" {
   type        = list(string)
   description = "EC2 instance types for EKS node group"
-  # Use a free-tier-eligible instance type to avoid billing issues
   default     = ["t3.small"]
 }
 
@@ -38,13 +41,13 @@ variable "node_desired_size" {
 }
 
 variable "node_min_size" {
-  type        = number
-  default     = 1
+  type    = number
+  default = 1
 }
 
 variable "node_max_size" {
-  type        = number
-  default     = 4
+  type    = number
+  default = 4
 }
 
 variable "run_build_and_deploy" {

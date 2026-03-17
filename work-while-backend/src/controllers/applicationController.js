@@ -4,6 +4,7 @@ const Application = require('../models/Application');
 const Job = require('../models/Job');
 const User = require('../models/User');
 const { catchAsync, AppError, sendResponse } = require('../utils/helpers');
+const { sendApplicationMessage } = require('../services/sqsService');
 
 // =====================================
 // CRÉER UNE NOUVELLE CANDIDATURE
@@ -177,6 +178,20 @@ const createApplication = catchAsync(async (req, res, next) => {
     // Créer l'application
     const application = await Application.create(applicationData);
     console.log('  ✅ Application created successfully:', application._id);
+
+    // Envoyer un message SQS pour traitement asynchrone (emails, analytics, etc.)
+    try {
+      await sendApplicationMessage({
+        type: 'APPLICATION_CREATED',
+        applicationId: application._id.toString(),
+        jobId: job._id.toString(),
+        applicantId: req.user._id.toString(),
+        createdAt: new Date().toISOString(),
+      });
+      console.log('  ✅ SQS message sent for application:', application._id);
+    } catch (sqsError) {
+      console.error('  ⚠️ Failed to send SQS message:', sqsError.message);
+    }
 
     // Peupler les relations pour la réponse
     await application.populate([

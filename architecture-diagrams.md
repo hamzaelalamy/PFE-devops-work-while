@@ -599,27 +599,285 @@ graph TB
 
 ---
 
+## 11. Schéma d'Architecture AWS Cloud
+
+```mermaid
+graph TB
+    subgraph "AWS Cloud — us-east-1"
+        subgraph "VPC (10.0.0.0/16)"
+            subgraph "Public Subnets"
+                PubSub1["Public Subnet AZ-a<br/>10.0.0.0/24"]
+                PubSub2["Public Subnet AZ-b<br/>10.0.1.0/24"]
+            end
+
+            subgraph "Private Subnets"
+                PrivSub1["Private Subnet AZ-a<br/>10.0.10.0/24"]
+                PrivSub2["Private Subnet AZ-b<br/>10.0.11.0/24"]
+            end
+
+            IGW["Internet Gateway"]
+            NAT["NAT Gateway"]
+
+            subgraph "Amazon EKS Cluster"
+                subgraph "Node Group (t3.small)"
+                    FrontPod["Frontend Pod<br/>(Nginx)"]
+                    BackPod["Backend Pod<br/>(Node.js)"]
+                    MongoPod["MongoDB Pod"]
+                    FluentPod["Fluent Bit<br/>(DaemonSet)"]
+                end
+                HPA["HPA<br/>Auto-scaling"]
+                Ingress["Ingress<br/>Controller"]
+            end
+        end
+
+        ECR["Amazon ECR<br/>Container Registry"]
+        SQS["Amazon SQS<br/>Main Queue"]
+        DLQ["Amazon SQS<br/>Dead-Letter Queue"]
+        CW["Amazon CloudWatch<br/>Logs + Metrics + Alarms"]
+        S3["Amazon S3<br/>Terraform State"]
+        IAM["AWS IAM<br/>Roles & Policies"]
+    end
+
+    Users([Users]) --> IGW
+    IGW --> Ingress
+    Ingress --> FrontPod
+    FrontPod -->|"/api"| BackPod
+    BackPod --> MongoPod
+    BackPod -->|"Send Messages"| SQS
+    SQS -->|"Failed Messages"| DLQ
+    FluentPod -->|"Forward Logs"| CW
+    HPA --> BackPod
+    HPA --> FrontPod
+    NAT --> PrivSub1
+    NAT --> PrivSub2
+    ECR -->|"Pull Images"| BackPod
+    ECR -->|"Pull Images"| FrontPod
+
+    style IGW fill:#FF9900
+    style NAT fill:#FF9900
+    style ECR fill:#FF9900
+    style SQS fill:#FF4F8B
+    style DLQ fill:#FF4F8B
+    style CW fill:#FF4F8B
+    style S3 fill:#3F8624
+    style IAM fill:#DD344C
+```
+
+## 12. Schéma du Pipeline CI/CD
+
+```mermaid
+graph LR
+    subgraph "Trigger"
+        Push["Push to main/master"]
+        PR["Pull Request"]
+    end
+
+    subgraph "CI — Continuous Integration"
+        Checkout["Checkout Code"]
+        SetupNode["Setup Node.js 20"]
+
+        subgraph "Backend CI"
+            BInstall["npm ci"]
+            BTest["Run Tests<br/>(Jest)"]
+            BLint["ESLint"]
+        end
+
+        subgraph "Frontend CI"
+            FInstall["npm ci"]
+            FBuild["Build<br/>(Vite)"]
+            FLint["ESLint"]
+        end
+    end
+
+    subgraph "Build & Push (main only)"
+        AWSLogin["AWS OIDC Auth"]
+        ECRLogin["ECR Login"]
+        BuildBack["Build Backend<br/>Docker Image"]
+        BuildFront["Build Frontend<br/>Docker Image"]
+        PushECR["Push to ECR<br/>(tag: SHA + latest)"]
+    end
+
+    subgraph "CD — Deploy (main only)"
+        Kubeconfig["Update kubeconfig"]
+        CreateNS["Create Namespace<br/>& Secrets"]
+        Kustomize["Kustomize<br/>Set ECR Images"]
+        Deploy["kubectl apply<br/>-k k8s/overlays/ecr/"]
+        Rollout["Wait for Rollout<br/>(backend, frontend)"]
+        Status["Show Pod Status"]
+    end
+
+    subgraph "Rollback (manual)"
+        RBTrigger["workflow_dispatch"]
+        RBUndo["kubectl rollout undo"]
+        RBWait["Wait for Rollout"]
+    end
+
+    Push --> Checkout
+    PR --> Checkout
+    Checkout --> SetupNode
+    SetupNode --> BInstall --> BTest --> BLint
+    SetupNode --> FInstall --> FBuild --> FLint
+    BLint --> AWSLogin
+    FLint --> AWSLogin
+    AWSLogin --> ECRLogin
+    ECRLogin --> BuildBack --> PushECR
+    ECRLogin --> BuildFront --> PushECR
+    PushECR --> Kubeconfig --> CreateNS --> Kustomize --> Deploy --> Rollout --> Status
+    RBTrigger --> RBUndo --> RBWait
+
+    style Push fill:#2da44e
+    style AWSLogin fill:#FF9900
+    style Deploy fill:#326CE5
+    style RBTrigger fill:#da3633
+```
+
+## 13. Schéma Kubernetes (Pods, Services)
+
+```mermaid
+graph TB
+    subgraph "Namespace: workwhile"
+        subgraph "Ingress"
+            ING["workwhile-ingress<br/>(nginx IngressClass)"]
+        end
+
+        subgraph "Frontend"
+            FSvc["frontend Service<br/>(ClusterIP :80)"]
+            FDep["frontend Deployment"]
+            FPod1["frontend Pod<br/>(nginx:alpine)"]
+            FHPA["frontend-hpa<br/>CPU 70% / Mem 80%<br/>1–5 replicas"]
+        end
+
+        subgraph "Backend"
+            BSvc["backend Service<br/>(ClusterIP :5000)"]
+            BDep["backend Deployment<br/>(RollingUpdate)"]
+            BPod1["backend Pod<br/>(node:20)"]
+            BHPA["backend-hpa<br/>CPU 70% / Mem 80%<br/>1–5 replicas"]
+            BPVC["backend-uploads-pvc"]
+        end
+
+        subgraph "MongoDB"
+            MSvc["mongodb Service<br/>(ClusterIP :27017)"]
+            MDep["mongodb Deployment"]
+            MPod1["mongodb Pod<br/>(mongo:7)"]
+            MPVC["mongodb-pvc"]
+        end
+
+        subgraph "Logging"
+            FBDS["fluent-bit DaemonSet"]
+            FBPod["fluent-bit Pod<br/>(aws-for-fluent-bit)"]
+            FBCM["fluent-bit-config<br/>(ConfigMap)"]
+        end
+
+        subgraph "Configuration"
+            CM["workwhile-config<br/>(ConfigMap)"]
+            SEC["workwhile-secrets<br/>(Secret)"]
+        end
+    end
+
+    CW["CloudWatch Logs"]
+    ECR["Amazon ECR"]
+
+    ING -->|"/ → :80"| FSvc
+    FSvc --> FDep --> FPod1
+    FHPA -->|"scale"| FDep
+    FPod1 -->|"/api → :5000"| BSvc
+    BSvc --> BDep --> BPod1
+    BHPA -->|"scale"| BDep
+    BPod1 --> MSvc --> MDep --> MPod1
+    BPod1 --- BPVC
+    MPod1 --- MPVC
+    BPod1 --- CM
+    BPod1 --- SEC
+    FBDS --> FBPod
+    FBPod --- FBCM
+    FBPod -->|"logs"| CW
+    ECR -->|"pull"| FPod1
+    ECR -->|"pull"| BPod1
+
+    style ING fill:#326CE5,color:#fff
+    style FSvc fill:#326CE5,color:#fff
+    style BSvc fill:#326CE5,color:#fff
+    style MSvc fill:#326CE5,color:#fff
+    style CW fill:#FF4F8B
+    style ECR fill:#FF9900
+```
+
+## 14. Schéma Réseau (VPC, Subnets, Sécurité)
+
+```mermaid
+graph TB
+    Internet([Internet])
+
+    subgraph "AWS VPC — 10.0.0.0/16"
+        IGW["Internet Gateway"]
+
+        subgraph "Public Subnet AZ-a — 10.0.0.0/24"
+            NAT["NAT Gateway<br/>+ Elastic IP"]
+            PubRT1["Route: 0.0.0.0/0 → IGW"]
+        end
+
+        subgraph "Public Subnet AZ-b — 10.0.1.0/24"
+            PubRT2["Route: 0.0.0.0/0 → IGW"]
+        end
+
+        subgraph "Private Subnet AZ-a — 10.0.10.0/24"
+            Node1["EKS Worker Node 1"]
+            PrivRT1["Route: 0.0.0.0/0 → NAT"]
+        end
+
+        subgraph "Private Subnet AZ-b — 10.0.11.0/24"
+            Node2["EKS Worker Node 2"]
+            PrivRT2["Route: 0.0.0.0/0 → NAT"]
+        end
+
+        subgraph "EKS Cluster Security"
+            CLSG["Cluster SG<br/>(EKS-managed)"]
+            NSG["Node SG<br/>(EKS-managed)"]
+        end
+
+        EKS["EKS Control Plane<br/>(AWS-managed)<br/>Public + Private Endpoints"]
+    end
+
+    Internet --> IGW
+    IGW --> PubRT1
+    IGW --> PubRT2
+    NAT --> PrivRT1
+    NAT --> PrivRT2
+    EKS -->|"API"| CLSG
+    CLSG -->|"kubelet"| NSG
+    NSG --> Node1
+    NSG --> Node2
+    Node1 -->|"outbound"| NAT
+    Node2 -->|"outbound"| NAT
+
+    style IGW fill:#FF9900
+    style NAT fill:#FF9900
+    style EKS fill:#326CE5,color:#fff
+    style CLSG fill:#DD344C,color:#fff
+    style NSG fill:#DD344C,color:#fff
+```
+
+---
+
 ## Summary
 
-This documentation provides comprehensive architectural diagrams for the **WorkWhile** job platform application:
+This documentation provides comprehensive architectural diagrams for the **WorkWhile** platform:
 
-1. **MCD (Entity Relationship Diagram)**: Shows the database schema with 5 main entities (User, Job, Company, Application, ScrapingLog) and their relationships
-2. **System Architecture**: High-level overview of all system components and their interactions
-3. **Backend Layered Architecture**: Shows the separation of concerns in the backend
-4. **Authentication Flow**: Sequence diagram for user registration and login
-5. **Job Application Flow**: Complete workflow from job search to application status updates
-6. **AI-Powered Matching**: How the application uses transformer models for intelligent job matching
-7. **Web Scraping**: Architecture for automated job scraping from external sites
-8. **Security & Middleware**: Request processing pipeline with all security layers
-9. **Technology Stack**: Complete mind map of all technologies used
-10. **Deployment Architecture**: Production and development environment setup
+### Application Diagrams (1–10)
+1. **MCD (Entity Relationship)** — 5 entities and their relationships
+2. **System Architecture** — High-level component overview
+3. **Backend Layered Architecture** — Separation of concerns
+4. **Authentication Flow** — Registration and login sequence
+5. **Job Application Flow** — Search to status update workflow
+6. **AI-Powered Matching** — Transformer model integration
+7. **Web Scraping** — Automated job scraping architecture
+8. **Security & Middleware** — Request processing pipeline
+9. **Technology Stack** — Complete tech mind map
+10. **Deployment Architecture** — Production and dev environments
 
-### Key Features
+### Infrastructure & DevOps Diagrams (11–14)
+11. **AWS Cloud Architecture** — VPC, EKS, ECR, SQS, CloudWatch layout
+12. **CI/CD Pipeline** — GitHub Actions: CI → Build → Deploy → Rollback
+13. **Kubernetes Topology** — Pods, Services, HPAs, DaemonSets, ConfigMaps
+14. **VPC Network** — Subnets, routing, NAT Gateway, security groups
 
-- **Full-stack MERN** application (MongoDB, Express, React, Node.js)
-- **AI-powered job matching** using transformer models
-- **Automated job scraping** from multiple sources
-- **Comprehensive authentication** and authorization
-- **Multi-role system** (candidates, employers, admins)
-- **Real-time application tracking**
-- **Scalable microservices-ready** architecture

@@ -1,9 +1,15 @@
+# ============================================
+# IAM Module
+# ============================================
+# Creates IAM roles and policy attachments
+# for EKS cluster and node group.
+
 ######################################
 # EKS Cluster IAM Role
 ######################################
 
 resource "aws_iam_role" "eks_cluster" {
-  name = "${local.name_prefix}-eks-cluster-role"
+  name = "${var.name_prefix}-eks-cluster-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -32,7 +38,7 @@ resource "aws_iam_role_policy_attachment" "eks_vpc_resource_controller" {
 ######################################
 
 resource "aws_iam_role" "eks_node" {
-  name = "${local.name_prefix}-eks-node-role"
+  name = "${var.name_prefix}-eks-node-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -63,5 +69,10 @@ resource "aws_iam_role_policy_attachment" "eks_node_registry" {
 
 resource "aws_iam_role_policy_attachment" "eks_node_ebs_csi" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+  role       = aws_iam_role.eks_node.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks_node_cloudwatch" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
   role       = aws_iam_role.eks_node.name
 }

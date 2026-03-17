@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqs-worker
+  namespace: workwhile
+  labels:
+    app: sqs-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sqs-worker
+  template:
+    metadata:
+      labels:
+        app: sqs-worker
+    spec:
+      containers:
+        - name: sqs-worker
+          image: workwhile-backend:latest
+          imagePullPolicy: Always
+          command: ["node", "src/workers/sqsWorker.js"]
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: workwhile-config
+                  key: NODE_ENV
+            - name: AWS_REGION
+              value: "us-east-1"
+            - name: SQS_QUEUE_URL
+              value: "https://sqs.us-east-1.amazonaws.com/772200096303/workwhile-dev-queue"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+

@@ -1,33 +1,47 @@
+# ============================================
+# Root Outputs
+# ============================================
+
 output "vpc_id" {
-  value = aws_vpc.this.id
+  value = module.vpc.vpc_id
 }
 
 output "public_subnet_ids" {
-  value = aws_subnet.public[*].id
+  value = module.vpc.public_subnet_ids
 }
 
 output "private_subnet_ids" {
-  value = aws_subnet.private[*].id
+  value = module.vpc.private_subnet_ids
 }
 
 output "eks_cluster_name" {
-  value = aws_eks_cluster.this.name
+  value = module.eks.cluster_name
 }
 
 output "eks_cluster_endpoint" {
-  value     = aws_eks_cluster.this.endpoint
+  value     = module.eks.cluster_endpoint
   sensitive = true
 }
 
 output "ecr_backend_url" {
-  value = aws_ecr_repository.backend.repository_url
+  value = module.ecr.backend_repository_url
 }
 
 output "ecr_frontend_url" {
-  value = aws_ecr_repository.frontend.repository_url
+  value = module.ecr.frontend_repository_url
 }
 
 output "configure_kubectl" {
-  value       = "aws eks update-kubeconfig --region ${var.aws_region} --name ${aws_eks_cluster.this.name}"
+  value       = "aws eks update-kubeconfig --region ${var.aws_region} --name ${module.eks.cluster_name}"
   description = "Run this command to configure kubectl"
+}
+
+output "sqs_queue_url" {
+  value       = module.sqs.queue_url
+  description = "Main SQS queue URL for async processing"
+}
+
+output "sqs_dlq_url" {
+  value       = module.sqs.dlq_url
+  description = "Dead-letter queue URL"
 }

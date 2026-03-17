@@ -1,10 +1,16 @@
+# ============================================
+# EKS Module
+# ============================================
+# Creates the EKS cluster, managed node group,
+# GitHub OIDC access entries, and EBS CSI addon.
+
 resource "aws_eks_cluster" "this" {
-  name     = local.eks_cluster_name
+  name     = var.cluster_name
   version  = var.cluster_version
-  role_arn = aws_iam_role.eks_cluster.arn
+  role_arn = var.cluster_role_arn
 
   vpc_config {
-    subnet_ids              = concat(aws_subnet.public[*].id, aws_subnet.private[*].id)
+    subnet_ids              = concat(var.public_subnet_ids, var.private_subnet_ids)
     endpoint_public_access  = true
     endpoint_private_access = true
   }
@@ -15,21 +21,21 @@ resource "aws_eks_cluster" "this" {
     bootstrap_cluster_creator_admin_permissions = true
   }
 
-  depends_on = [
-    aws_iam_role_policy_attachment.eks_cluster_policy,
-    aws_iam_role_policy_attachment.eks_vpc_resource_controller,
-  ]
+  depends_on = []
 
   tags = {
-    Name = local.eks_cluster_name
+    Name        = var.cluster_name
+    Project     = var.name_prefix
+    Environment = var.name_prefix
+    CostCenter  = "pfe-devops"
   }
 }
 
 resource "aws_eks_node_group" "this" {
   cluster_name    = aws_eks_cluster.this.name
-  node_group_name = "${local.name_prefix}-nodes"
-  node_role_arn   = aws_iam_role.eks_node.arn
-  subnet_ids      = aws_subnet.private[*].id
+  node_group_name = "${var.name_prefix}-nodes"
+  node_role_arn   = var.node_role_arn
+  subnet_ids      = var.private_subnet_ids
   instance_types  = var.node_instance_types
 
   scaling_config {
@@ -38,14 +44,13 @@ resource "aws_eks_node_group" "this" {
     min_size     = var.node_min_size
   }
 
-  depends_on = [
-    aws_iam_role_policy_attachment.eks_node_worker,
-    aws_iam_role_policy_attachment.eks_node_cni,
-    aws_iam_role_policy_attachment.eks_node_registry,
-  ]
+  depends_on = []
 
   tags = {
-    Name = "${local.name_prefix}-node-group"
+    Name        = "${var.name_prefix}-node-group"
+    Project     = var.name_prefix
+    Environment = var.name_prefix
+    CostCenter  = "pfe-devops"
   }
 }
 
@@ -67,4 +72,23 @@ resource "aws_eks_access_policy_association" "github_oidc_admin" {
   access_scope {
     type = "cluster"
   }
+}
+
+# EBS CSI driver add-on so PVCs can provision EBS volumes.
+resource "aws_eks_addon" "ebs_csi" {
+  cluster_name  = aws_eks_cluster.this.name
+  addon_name    = "aws-ebs-csi-driver"
+  addon_version = null
+
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+
+  timeouts {
+    create = "30m"
+    update = "30m"
+  }
+
+  depends_on = [
+    aws_eks_node_group.this,
+  ]
 }
