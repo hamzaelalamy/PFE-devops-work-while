@@ -42,6 +42,8 @@ spec:
               readOnly: true
             - name: fluent-bit-config
               mountPath: /fluent-bit/etc/
+            - name: flb-db
+              mountPath: /var/flb-db
           env:
             - name: AWS_REGION
               value: "us-east-1"
@@ -55,3 +57,5 @@ spec:
         - name: fluent-bit-config
           configMap:
             name: fluent-bit-config
+        - name: flb-db
+          emptyDir: {}

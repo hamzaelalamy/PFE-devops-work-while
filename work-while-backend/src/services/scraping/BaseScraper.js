@@ -25,7 +25,15 @@ class BaseScraper {
         try {
             const launchOptions = {
                 headless: process.env.PUPPETEER_HEADLESS !== 'false',
-                args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-gpu',
+                    '--disable-crash-reporter',
+                    '--no-crash-upload',
+                    '--single-process'
+                ]
             };
             if (process.env.PUPPETEER_EXECUTABLE_PATH) {
                 launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
