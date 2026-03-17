@@ -1,3 +1,9 @@
+// Mock @xenova/transformers (ESM-only) before loading the app,
+// so Jest doesn't try to parse the real ESM module from node_modules.
+jest.mock('@xenova/transformers', () => ({
+  pipeline: () => jest.fn(),
+}));
+
 const request = require('supertest');
 const app = require('../src/app');
 
@@ -9,4 +15,5 @@ describe('Health endpoint', () => {
     expect(res.body).toHaveProperty('status');
   });
 });
+
 
