@@ -530,49 +530,53 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST || '0.0.0.0';
 
-const server = app.listen(PORT, HOST, () => {
-  console.log('\n' + '='.repeat(70));
-  console.log('🚀 WORKWHILE API SERVER STARTED');
-  console.log('='.repeat(70));
-  console.log(`📍 Server: http://${HOST}:${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔧 Process ID: ${process.pid}`);
-  console.log(`💾 Node Version: ${process.version}`);
-  console.log(`\n📡 Test Endpoints:`);
-  console.log(`   🏥 Health: http://${HOST}:${PORT}/api/health`);
-  console.log(`   🏓 Ping: http://${HOST}:${PORT}/api/ping`);
-  console.log(`   🧪 CORS Test: http://${HOST}:${PORT}/api/cors-test`);
-  console.log(`   🔍 CORS Debug: http://${HOST}:${PORT}/api/cors-debug`);
-  console.log(`   📊 Status: http://${HOST}:${PORT}/api/status`);
-  console.log(`\n📡 CORS Configuration:`);
-  console.log(`   ✅ Allowed Origins:`);
-  console.log(`      - https://trouvetonjob.vercel.app`);
-  console.log(`      - https://workwhile-front-d2sc.vercel.app`);
-  console.log(`      - localhost development servers`);
-  console.log(`      - *.vercel.app, *.netlify.app, *.ngrok.* patterns`);
-  console.log(`   ✅ Credentials: Enabled`);
-  console.log(`   ✅ Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD`);
-  console.log(`   ✅ Enhanced debugging enabled`);
-  console.log(`\n🚦 Rate Limiting Status:`);
-  console.log(`   ⚠️  AUTH RATE LIMITING: DISABLED FOR TESTING`);
-  console.log(`   ✅ General Rate Limiting: 1000 requests/15min`);
-  console.log(`   🧪 Ready for unlimited registration/login attempts!`);
-  console.log('='.repeat(70));
+let server = null;
 
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`\n🔧 Development Mode Features:`);
-    console.log(`   📝 Detailed request logging enabled`);
-    console.log(`   🌐 Permissive CORS for unknown origins`);
-    console.log(`   🐛 Enhanced error reporting`);
-    console.log(`   📡 Ready for ngrok: ngrok http ${PORT}`);
-    console.log(`   ⚠️  Auth rate limiting DISABLED for testing`);
-    console.log(`\n💡 Pro tip: Watch this console for detailed logs!`);
-  }
+if (process.env.NODE_ENV !== 'test') {
+  server = app.listen(PORT, HOST, () => {
+    console.log('\n' + '='.repeat(70));
+    console.log('🚀 WORKWHILE API SERVER STARTED');
+    console.log('='.repeat(70));
+    console.log(`📍 Server: http://${HOST}:${PORT}`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔧 Process ID: ${process.pid}`);
+    console.log(`💾 Node Version: ${process.version}`);
+    console.log(`\n📡 Test Endpoints:`);
+    console.log(`   🏥 Health: http://${HOST}:${PORT}/api/health`);
+    console.log(`   🏓 Ping: http://${HOST}:${PORT}/api/ping`);
+    console.log(`   🧪 CORS Test: http://${HOST}:${PORT}/api/cors-test`);
+    console.log(`   🔍 CORS Debug: http://${HOST}:${PORT}/api/cors-debug`);
+    console.log(`   📊 Status: http://${HOST}:${PORT}/api/status`);
+    console.log(`\n📡 CORS Configuration:`);
+    console.log(`   ✅ Allowed Origins:`);
+    console.log(`      - https://trouvetonjob.vercel.app`);
+    console.log(`      - https://workwhile-front-d2sc.vercel.app`);
+    console.log(`      - localhost development servers`);
+    console.log(`      - *.vercel.app, *.netlify.app, *.ngrok.* patterns`);
+    console.log(`   ✅ Credentials: Enabled`);
+    console.log(`   ✅ Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD`);
+    console.log(`   ✅ Enhanced debugging enabled`);
+    console.log(`\n🚦 Rate Limiting Status:`);
+    console.log(`   ⚠️  AUTH RATE LIMITING: DISABLED FOR TESTING`);
+    console.log(`   ✅ General Rate Limiting: 1000 requests/15min`);
+    console.log(`   🧪 Ready for unlimited registration/login attempts!`);
+    console.log('='.repeat(70));
 
-  console.log('\n');
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`\n🔧 Development Mode Features:`);
+      console.log(`   📝 Detailed request logging enabled`);
+      console.log(`   🌐 Permissive CORS for unknown origins`);
+      console.log(`   🐛 Enhanced error reporting`);
+      console.log(`   📡 Ready for ngrok: ngrok http ${PORT}`);
+      console.log(`   ⚠️  Auth rate limiting DISABLED for testing`);
+      console.log(`\n💡 Pro tip: Watch this console for detailed logs!`);
+    }
 
-  logger.info(`🚀 WorkWhile API Server started on ${HOST}:${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
-});
+    console.log('\n');
+
+    logger.info(`🚀 WorkWhile API Server started on ${HOST}:${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+  });
+}
 
 // =====================================
 // GRACEFUL SHUTDOWN
@@ -615,14 +619,16 @@ process.on('SIGINT', () => {
 // DEVELOPMENT HELPERS
 // =====================================
 
-// Log startup completion
-setTimeout(() => {
-  console.log(`🎉 Server fully initialized and ready to accept connections!`);
-  console.log(`🧪 TESTING MODE: Auth rate limiting disabled - ready for unlimited registration/login attempts!`);
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`🔗 Try: curl http://localhost:${PORT}/api/health`);
-  }
-}, 1000);
+// Log startup completion (only when server is running)
+if (process.env.NODE_ENV !== 'test') {
+  setTimeout(() => {
+    console.log(`🎉 Server fully initialized and ready to accept connections!`);
+    console.log(`🧪 TESTING MODE: Auth rate limiting disabled - ready for unlimited registration/login attempts!`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🔗 Try: curl http://localhost:${PORT}/api/health`);
+    }
+  }, 1000);
+}
 
 // =====================================
 // EXPORT
