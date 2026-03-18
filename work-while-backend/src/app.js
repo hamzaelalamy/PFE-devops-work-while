@@ -79,6 +79,9 @@ const corsOptions = {
       /^https:\/\/.*\.ngrok-free\.app$/,
       /^https:\/\/.*\.ngrok\.app$/,
       /^https:\/\/.*\.ngrok\.dev$/,
+      // AWS ELB (frontend served via LoadBalancer)
+      /^https?:\/\/[a-z0-9-]+-[0-9]+\.us-east-1\.elb\.amazonaws\.com$/,
+      /^https?:\/\/.*\.elb\.amazonaws\.com$/,
     ];
 
     // Check exact matches first

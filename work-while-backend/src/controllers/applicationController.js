@@ -294,7 +294,7 @@ const getJobApplications = catchAsync(async (req, res, next) => {
     return next(new AppError('Job not found', 404));
   }
 
-  if (req.user.role !== 'admin' && job.employer.toString() !== req.user._id.toString()) {
+  if (req.user.role !== 'admin' && job.postedBy.toString() !== req.user._id.toString()) {
     return next(new AppError('You can only view applications for your own jobs', 403));
   }
 
@@ -343,7 +343,7 @@ const updateApplicationStatus = catchAsync(async (req, res, next) => {
   const { status, notes } = req.body;
 
   const application = await Application.findById(req.params.id)
-    .populate('job', 'employer');
+    .populate('job', 'postedBy');
 
   if (!application) {
     return next(new AppError('Application not found', 404));
@@ -351,7 +351,7 @@ const updateApplicationStatus = catchAsync(async (req, res, next) => {
 
   // Vérifier les permissions
   if (req.user.role !== 'admin' && 
-      application.job.employer.toString() !== req.user._id.toString()) {
+      application.job.postedBy.toString() !== req.user._id.toString()) {
     return next(new AppError('You can only update applications for your own jobs', 403));
   }
 

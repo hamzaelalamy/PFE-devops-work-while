@@ -23,8 +23,11 @@ class BaseScraper {
         });
 
         try {
+            // Writable dir for Chromium/crashpad in containers (avoids "chrome_crashpad_handler: --database is required")
+            const userDataDir = process.env.PUPPETEER_USER_DATA_DIR || '/tmp/puppeteer-chrome-data';
             const launchOptions = {
                 headless: process.env.PUPPETEER_HEADLESS !== 'false',
+                userDataDir,
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
@@ -32,7 +35,11 @@ class BaseScraper {
                     '--disable-gpu',
                     '--disable-crash-reporter',
                     '--no-crash-upload',
-                    '--single-process'
+                    '--single-process',
+                    '--disable-software-rasterizer',
+                    '--disable-extensions',
+                    '--no-first-run',
+                    '--no-zygote'
                 ]
             };
             if (process.env.PUPPETEER_EXECUTABLE_PATH) {
