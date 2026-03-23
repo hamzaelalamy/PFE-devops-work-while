@@ -1,4 +1,6 @@
 
+import { Star } from 'lucide-react';
+
 const StarRating = ({ rating }) => {
   const stars = [];
   for (let i = 0; i < 5; i++) {

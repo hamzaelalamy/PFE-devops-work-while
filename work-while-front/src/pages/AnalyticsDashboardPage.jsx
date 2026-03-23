@@ -7,7 +7,22 @@ import {
     fetchJobTrends
 } from '../redux/slices/analyticsSlice';
 
-import { TrendingUp, Users, Briefcase, Building } from 'lucide-react';
+import { Activity, TrendingUp, Users, Briefcase, Building } from 'lucide-react';
+import {
+    Area,
+    AreaChart,
+    Bar,
+    BarChart,
+    CartesianGrid,
+    Cell,
+    Legend,
+    Pie,
+    PieChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from 'recharts';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 

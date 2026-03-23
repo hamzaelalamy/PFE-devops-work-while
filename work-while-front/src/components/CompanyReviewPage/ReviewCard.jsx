@@ -1,4 +1,7 @@
 
+import { User } from 'lucide-react';
+import StarRating from './StarRating';
+
 const ReviewCard = ({ review, companyData }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100 h-full flex flex-col">

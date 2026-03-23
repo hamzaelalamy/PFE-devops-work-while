@@ -1,5 +1,6 @@
 
 // CompanyCard.jsx
+import StarRating from './StarRating';
 
 const CompanyCard = ({ company }) => {
   return (

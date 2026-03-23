@@ -1,6 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+    Activity,
+    BarChart3,
+    Briefcase,
+    Calendar,
+    CheckCircle,
+    Clock,
+    Download,
+    Edit,
+    Eye,
+    FileText,
+    Mail,
+    PieChart,
+    Plus,
+    TrendingUp,
+    User,
+    Users,
+    XCircle,
+} from 'lucide-react';
 
 
 import applicationService from '../services/applicationService';

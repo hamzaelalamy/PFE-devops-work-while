@@ -10,6 +10,7 @@ import {
     bulkRejectJobs,
     clearStatus
 } from '../redux/slices/scrapingSlice';
+import { Check, Database, Play, RefreshCw, X } from 'lucide-react';
 
 const ScrapingDashboardPage = () => {
     const dispatch = useDispatch();

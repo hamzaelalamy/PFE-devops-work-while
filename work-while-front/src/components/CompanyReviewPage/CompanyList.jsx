@@ -1,4 +1,6 @@
 
+import CompanyCard from './CompanyCard';
+
 const CompanyList = ({ companies }) => {
     return (
         <div className="mb-16">

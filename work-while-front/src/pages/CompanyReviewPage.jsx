@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
 import { companies, reviewsData } from '../components/CompanyReviewPage/data.js';
+import Header from '../components/CompanyReviewPage/Header';
+import SearchBar from '../components/CompanyReviewPage/SearchBar';
+import CompanyList from '../components/CompanyReviewPage/CompanyList';
+import ReviewCarousel from '../components/CompanyReviewPage/ReviewCarousel';
+import CallToAction from '../components/CompanyReviewPage/CallToAction';
+import IndustryCategories from '../components/CompanyReviewPage/IndustryCategories';
 
 const CompanyReviewPage = () => {
   const [searchQuery, setSearchQuery] = useState('');

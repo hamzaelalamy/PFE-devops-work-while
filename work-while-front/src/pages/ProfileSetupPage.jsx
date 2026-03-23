@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import {
+  AlertCircle,
+  Award,
+  Briefcase,
+  Camera,
+  Mail,
+  MapPin,
+  Phone,
+  Save,
+  User,
+} from 'lucide-react';
 import { updateUser } from '../redux/slices/authSlice';
 import userService from '../services/userService';
 
