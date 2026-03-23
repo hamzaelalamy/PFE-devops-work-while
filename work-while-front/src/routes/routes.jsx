@@ -124,7 +124,7 @@ const PublicRoute = ({ children }) => {
 };
 
 // Placeholder Pages for development
-// eslint-disable-next-line unused-imports/no-unused-vars
+ 
 const SalaryGuidePage = () => (
     <div className="max-w-4xl mx-auto px-4 mt-24 mb-16">
         <div className="text-center py-16 bg-gray-50 rounded-lg">
@@ -137,7 +137,7 @@ const SalaryGuidePage = () => (
     </div>
 );
 
-// eslint-disable-next-line unused-imports/no-unused-vars
+ 
 const NotificationsPage = () => (
     <div className="max-w-4xl mx-auto px-4 mt-24 mb-16">
         <div className="text-center py-16 bg-gray-50 rounded-lg">
@@ -151,7 +151,7 @@ const NotificationsPage = () => (
 );
 
 // App Content with Navigation
-// eslint-disable-next-line unused-imports/no-unused-vars
+ 
 const AppContent = () => {
     const dispatch = useDispatch();
     const { loading } = useSelector(state => state.auth);
@@ -443,7 +443,7 @@ const AppContent = () => {
 };
 
 // Error Boundary Component
-// eslint-disable-next-line unused-imports/no-unused-vars
+ 
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);

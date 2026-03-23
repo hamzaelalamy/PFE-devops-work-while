@@ -598,7 +598,7 @@ const DashboardPage = ({ isAdmin = false }) => {
     }
 };
 
-/* eslint-disable unused-imports/no-unused-vars */
+ 
 // Composants utilitaires — used via JSX
 const StatCard = ({ title, value, icon, color, change }) => {
     const colorClasses = {

@@ -4,7 +4,7 @@ import "./index.css";
 import AppRouter from "./routes/routes";
 
 // Error boundary component
-// eslint-disable-next-line unused-imports/no-unused-vars
+ 
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);

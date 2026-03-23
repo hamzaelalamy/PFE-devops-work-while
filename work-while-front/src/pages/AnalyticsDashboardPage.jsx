@@ -26,7 +26,7 @@ import {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
-// eslint-disable-next-line unused-imports/no-unused-vars
+ 
 const StatCard = ({ title, value, icon: Icon, color }) => (
     <div className="bg-white p-6 rounded-lg shadow-md border-l-4" style={{ borderColor: color }}>
         <div className="flex justify-between items-start">

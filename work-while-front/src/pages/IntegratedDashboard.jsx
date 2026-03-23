@@ -517,7 +517,7 @@ const IntegratedDashboard = () => {
                                             { id: 'experience', label: 'Expérience', icon: Briefcase },
                                             { id: 'education', label: 'Formation', icon: GraduationCap }
                                         ].map(tab => {
-                                            // eslint-disable-next-line unused-imports/no-unused-vars
+                                             
                                             const Icon = tab.icon;
                                             return (
                                                 <button
@@ -815,7 +815,7 @@ const IntegratedDashboard = () => {
 };
 
 // Composant StatCard
-// eslint-disable-next-line unused-imports/no-unused-vars
+ 
 const StatCard = ({ title, value, icon, color }) => {
     const colorClasses = {
         blue: 'bg-blue-500',

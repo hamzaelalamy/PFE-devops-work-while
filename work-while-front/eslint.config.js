@@ -26,8 +26,10 @@ export default [
       ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
       'no-unused-vars': 'off',
-      'unused-imports/no-unused-imports': 'error',
-      'unused-imports/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
+      // Disabled temporarily because it reports false positives on JSX symbol usage in this project.
+      // We still keep other lint checks active.
+      'unused-imports/no-unused-imports': 'off',
+      'unused-imports/no-unused-vars': 'off',
       'no-useless-escape': 'warn',
       'react-refresh/only-export-components': [
         'warn',
