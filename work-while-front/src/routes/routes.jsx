@@ -254,6 +254,14 @@ const AppContent = () => {
                             </ProtectedRoute>
                         }
                     />
+                    <Route
+                        path="/profile-setup"
+                        element={
+                            <ProtectedRoute>
+                                <ProfileSetupPage />
+                            </ProtectedRoute>
+                        }
+                    />
 
                     <Route
                         path="/dashboard"

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 const NotFoundPage = () => {
     const titleRef = useRef(null);
@@ -41,7 +42,7 @@ const NotFoundPage = () => {
             <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/50 to-blue-900/30"></div>
             
             {/* Main content */}
-            <div className="error-container relative z-10 bg-gray-800/50 p-8 rounded-xl backdrop-blur-sm border border-gray-700 shadow-xl transition-all duration-300 max-w-md text-center"></div>
+            <div className="error-container relative z-10 bg-gray-800/50 p-8 rounded-xl backdrop-blur-sm border border-gray-700 shadow-xl transition-all duration-300 max-w-md text-center">
                 <h1 ref={titleRef} className="text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600 mb-2">404</h1>
                 
                 <div className="text-xl font-semibold text-gray-100 mb-4">Page Not Found</div>
@@ -55,6 +56,7 @@ const NotFoundPage = () => {
                     <span>Return Home</span>
                     <span className="transform transition-transform group-hover:translate-x-1">→</span>
                 </Link>
+            </div>
             
             {/* Decorative shapes */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">

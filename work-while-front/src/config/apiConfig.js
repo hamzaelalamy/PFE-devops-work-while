@@ -156,14 +156,12 @@ apiClient.interceptors.response.use(
       const isAuthPage = window.location.pathname.includes('/login') ||
         window.location.pathname.includes('/register');
 
-      // Only clear auth data and redirect if it's NOT an auth request and NOT on auth page
+      // Only clear auth data if it's NOT an auth request and NOT on auth page.
+      // Do not force page navigation/reload here: let pages show inline error messages.
       if (!isAuthRequest && !isAuthPage) {
         // Clear auth data
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-
-        // Redirect to login page
-        window.location.href = '/login';
       }
       // If it IS an auth request or we're on an auth page, just pass the error through
       // without redirecting - let the page handle it
