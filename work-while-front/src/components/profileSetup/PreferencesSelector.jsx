@@ -1,6 +1,6 @@
 
 // src/components/profile-setup/PreferencesSelector.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const workTypeOptions = [
   { id: 'full-time', label: 'Full-time' },

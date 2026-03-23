@@ -1,5 +1,4 @@
 import { useState, useEffect, forwardRef } from 'react';
-import { Search, ChevronDown } from 'lucide-react';
 import workwhileLogo from '../../../public/workwhile.png';
 
 // Company logo URLs

@@ -1,10 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import HeroSection from '../components/homepage/HeroSection';
-import FeaturesSection from '../components/homepage/FeaturesSection';
-import StatisticsSection from '../components/homepage/StatisticsSection';
-import CareerPathwaysSection from '../components/homepage/CareerPathwaysSection';
-import TestimonialsSection from '../components/homepage/TestimonialsSection';
-import CTASection from '../components/homepage/CTASection.jsx';
 
 // Changement du nom de la fonction pour correspondre à l'import dans routes.jsx
 export default function LandingPage() {
@@ -43,6 +37,7 @@ export default function LandingPage() {
         observer.unobserve(element);
       });
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

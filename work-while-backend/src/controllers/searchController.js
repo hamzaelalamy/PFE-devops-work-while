@@ -41,7 +41,7 @@ class SearchController {
                 .slice(0, 20); // Top 20 results
 
             // Remove embedding array from response to reduce size
-            const cleanResults = rankedJobs.map(({ embedding, ...job }) => job);
+            const cleanResults = rankedJobs.map(({ embedding: _embedding, ...job }) => job);
 
             res.status(200).json(cleanResults);
 

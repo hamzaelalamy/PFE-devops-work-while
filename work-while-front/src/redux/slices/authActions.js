@@ -113,8 +113,8 @@ export const checkAuthState = createAsyncThunk(
                     },
                     token
                 };
-                // eslint-disable-next-line no-unused-vars
-            } catch (apiError) {
+                 
+            } catch (_apiError) {
                 // Token is invalid, clear storage
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');

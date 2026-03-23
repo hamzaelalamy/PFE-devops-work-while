@@ -30,7 +30,6 @@ class ScraperManager {
 
     async runAll() {
         console.log('[ScraperManager] Starting all scrapers...');
-        const result = {};
 
         // Execute sequentially to avoid overwhelming system resources (browser instances)
         // Could be parallelized if resources allow (e.g. 4 core+ VPS)

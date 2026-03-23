@@ -318,8 +318,8 @@ export const copyToClipboard = async (text) => {
     try {
         await navigator.clipboard.writeText(text);
         return true;
-        // eslint-disable-next-line no-unused-vars
-    } catch (err) {
+         
+    } catch (_err) {
         // Fallback for older browsers
         const textarea = document.createElement('textarea');
         textarea.value = text;

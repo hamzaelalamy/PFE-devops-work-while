@@ -1,12 +1,11 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
+ 
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Save, User, Lock, Briefcase, Bell, LogOut } from 'lucide-react';
 import { logoutUser } from '../slices/authSlice';
 
 const ProfileSettingsPage = () => {
-  const { user, loading } = useSelector(state => state.auth);
+  const { user } = useSelector(state => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
@@ -123,7 +122,7 @@ const ProfileSettingsPage = () => {
       setTimeout(() => {
         setSuccessMessage('');
       }, 3000);
-    } catch (error) {
+    } catch (_error) {
       setFormErrors({ submit: 'Failed to update profile. Please try again.' });
     } finally {
       setIsSaving(false);

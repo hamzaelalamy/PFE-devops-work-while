@@ -299,7 +299,7 @@ const login = catchAsync(async (req, res, next) => {
 // =====================================
 // DÉCONNEXION D'UN UTILISATEUR
 // =====================================
-const logout = catchAsync(async (req, res, next) => {
+const logout = catchAsync(async (req, res, _next) => {
   console.log('\n👋 LOGOUT REQUEST:');
   console.log('  User ID:', req.user?._id);
   console.log('  User email:', req.user?.email);
@@ -687,7 +687,7 @@ const debug = catchAsync(async (req, res, next) => {
 // =====================================
 // MISE À JOUR DU PROFIL UTILISATEUR
 // =====================================
-const updateProfile = catchAsync(async (req, res, next) => {
+const updateProfile = catchAsync(async (req, res, _next) => {
   console.log('\n📝 PROFILE UPDATE:');
   console.log('  User ID:', req.user._id);
   console.log('  Update data:', req.body);

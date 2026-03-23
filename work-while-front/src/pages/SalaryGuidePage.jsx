@@ -1,5 +1,4 @@
 import { useState, forwardRef } from 'react';
-import { Search, DollarSign, Lightbulb, BookOpen, MessageCircle, ChevronDown, Award, Briefcase, Clock } from 'lucide-react';
 
 const SalaryGuidePage = forwardRef((props, ref) => {
   const [selectedCategory, setSelectedCategory] = useState('All');

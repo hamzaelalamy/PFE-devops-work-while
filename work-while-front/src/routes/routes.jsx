@@ -1,33 +1,12 @@
 // src/routes/routes.jsx
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import store from '../redux/store';
 import { checkAuthState } from '../redux/slices/authActions';
 
 // Layout Components
-import Navbar from '../components/common/Navbar';
-import Footer from '../components/common/Footer';
 
 // Pages - Correction de l'import Homepage
-import LandingPage from '../pages/LandingPage';
-import Loginpage from '../pages/Loginpage';
-import RegisterPage from '../pages/RegisterPage';
-import JobListingsPage from '../pages/JobListingsPage';
-import JobDetailsPage from '../pages/JobDetailsPage';
-import JobApplicationPage from '../pages/JobApplicationPage';
-import CreateJobPage from '../pages/CreateJobPage';
-import CompanyReviewPage from '../pages/CompanyReviewPage';
-import ProfilePage from '../pages/ProfileSetupPage.jsx';
-import DashboardPage from '../pages/DashboardPage';
-import NotFoundPage from '../pages/NotFoundPage';
-import ScrapingDashboardPage from '../pages/ScrapingDashboardPage';
-import AnalyticsDashboardPage from '../pages/AnalyticsDashboardPage';
-import ManageUsersPage from '../pages/ManageUsersPage';
-import ManageJobsPage from '../pages/ManageJobsPage';
-import ManageCompaniesPage from '../pages/ManageCompaniesPage';
-import CompanyDetailsPage from '../pages/CompanyDetailsPage';
-import ScrollToTop from '../components/common/ScrollToTop';
 
 // Optional pages (create these if needed)
 // import SalaryGuidePage from '../pages/SalaryGuidePage';
@@ -121,6 +100,7 @@ const PublicRoute = ({ children }) => {
 };
 
 // Placeholder Pages for development
+// eslint-disable-next-line unused-imports/no-unused-vars
 const SalaryGuidePage = () => (
     <div className="max-w-4xl mx-auto px-4 mt-24 mb-16">
         <div className="text-center py-16 bg-gray-50 rounded-lg">
@@ -133,6 +113,7 @@ const SalaryGuidePage = () => (
     </div>
 );
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 const NotificationsPage = () => (
     <div className="max-w-4xl mx-auto px-4 mt-24 mb-16">
         <div className="text-center py-16 bg-gray-50 rounded-lg">
@@ -146,6 +127,7 @@ const NotificationsPage = () => (
 );
 
 // App Content with Navigation
+// eslint-disable-next-line unused-imports/no-unused-vars
 const AppContent = () => {
     const dispatch = useDispatch();
     const { loading } = useSelector(state => state.auth);
@@ -437,6 +419,7 @@ const AppContent = () => {
 };
 
 // Error Boundary Component
+// eslint-disable-next-line unused-imports/no-unused-vars
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);

@@ -4,10 +4,10 @@ document.body.style.backgroundColor = 'red';
 console.log('🚀 Main.jsx executing check...');
 import React from "react";
 import ReactDOM from "react-dom/client";
-import AppRouter from "./routes/routes.jsx";
 import "./index.css";
 
 // Error boundary component
+// eslint-disable-next-line unused-imports/no-unused-vars
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);

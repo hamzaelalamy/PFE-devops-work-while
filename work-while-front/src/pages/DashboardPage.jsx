@@ -1,29 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-import {
-    Users,
-    Briefcase,
-    FileText,
-    TrendingUp,
-    Calendar,
-    Clock,
-    CheckCircle,
-    XCircle,
-    AlertCircle,
-    Plus,
-    Eye,
-    Edit,
-    BarChart3,
-    PieChart,
-    Activity,
-    Download,
-    User,
-    Mail,
-    Phone,
-    MapPin,
-    Star
-} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+
 import applicationService from '../services/applicationService';
 import jobService from '../services/jobService';
 import userService from '../services/userService';
@@ -63,6 +42,7 @@ const DashboardPage = ({ isAdmin = false }) => {
         };
 
         fetchDashboardData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.role, isAdmin]);
 
     const fetchCandidateDashboard = async () => {
@@ -599,7 +579,8 @@ const DashboardPage = ({ isAdmin = false }) => {
     }
 };
 
-// Composants utilitaires
+/* eslint-disable unused-imports/no-unused-vars */
+// Composants utilitaires — used via JSX
 const StatCard = ({ title, value, icon, color, change }) => {
     const colorClasses = {
         blue: 'bg-blue-500',

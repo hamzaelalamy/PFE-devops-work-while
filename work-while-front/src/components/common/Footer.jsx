@@ -1,5 +1,4 @@
 // src/components/common/Footer.jsx
-import { Link } from 'react-router-dom';
 
 export default function Footer() {
   // Color that complements the yellow background (#EDC418) of the CTA section

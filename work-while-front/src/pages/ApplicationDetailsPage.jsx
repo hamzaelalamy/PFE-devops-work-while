@@ -1,36 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-    Users,
     Briefcase,
-    FileText,
-    TrendingUp,
-    Calendar,
-    Clock,
-    CheckCircle,
-    XCircle,
-    AlertCircle,
-    Plus,
     Eye,
-    Edit,
-    BarChart3,
-    PieChart,
-    Activity,
-    Download,
-    User,
-    Mail,
-    Phone,
-    MapPin,
-    Star,
-    ArrowLeft,
-    DollarSign,
-    MessageSquare,
-    Award,
-    Send,
-    GraduationCap,
-    Globe,
-    Building,
-    BookOpen,
-    Languages
+    GraduationCap
 } from 'lucide-react';
 
 // Données de démonstration pour les candidatures
@@ -545,6 +517,7 @@ const IntegratedDashboard = () => {
                                             { id: 'experience', label: 'Expérience', icon: Briefcase },
                                             { id: 'education', label: 'Formation', icon: GraduationCap }
                                         ].map(tab => {
+                                            // eslint-disable-next-line unused-imports/no-unused-vars
                                             const Icon = tab.icon;
                                             return (
                                                 <button
@@ -842,6 +815,7 @@ const IntegratedDashboard = () => {
 };
 
 // Composant StatCard
+// eslint-disable-next-line unused-imports/no-unused-vars
 const StatCard = ({ title, value, icon, color }) => {
     const colorClasses = {
         blue: 'bg-blue-500',

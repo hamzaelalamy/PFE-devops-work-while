@@ -34,7 +34,7 @@ const companySchema = new mongoose.Schema({
     validate: {
       validator: function(v) {
         if (!v) return true; // Allow empty website
-        return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(v);
+        return /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/.test(v);
       },
       message: 'Please enter a valid website URL'
     }
@@ -57,7 +57,7 @@ const companySchema = new mongoose.Schema({
     trim: true,
     validate: {
       validator: function(v) {
-        return /^[\+]?[\d\s\-\(\)]{10,}$/.test(v);
+        return /^[+]?[\d\s\-()]{10,}$/.test(v);
       },
       message: 'Please enter a valid phone number (at least 10 digits)'
     }

@@ -2,10 +2,10 @@
 const User = require('../models/User');
 const Job = require('../models/Job');
 const { catchAsync, AppError, sendResponse, getPaginationMeta } = require('../utils/helpers');
-const { userValidators } = require('../utils/validators');
+// const { userValidators } = require('../utils/validators'); // used in routes, not here
 
 // Obtenir tous les utilisateurs (Admin)
-const getAllUsers = catchAsync(async (req, res, next) => {
+const getAllUsers = catchAsync(async (req, res, _next) => {
   const users = await User.find({})
     .select('-password')
     .sort({ createdAt: -1 });

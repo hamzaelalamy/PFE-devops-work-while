@@ -1,10 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import Header from '../components/CompanyReviewPage/Header';
-import SearchBar from '../components/CompanyReviewPage/SearchBar';
-import CompanyList from '../components/CompanyReviewPage/CompanyList';
-import ReviewCarousel from '../components/CompanyReviewPage/ReviewCarousel';
-import CallToAction from '../components/CompanyReviewPage/CallToAction';
-import IndustryCategories from '../components/CompanyReviewPage/IndustryCategories';
+import { useState, useEffect } from 'react';
 import { companies, reviewsData } from '../components/CompanyReviewPage/data.js';
 
 const CompanyReviewPage = () => {
@@ -13,7 +7,7 @@ const CompanyReviewPage = () => {
   const [carouselPosition, setCarouselPosition] = useState(0);
 
   // Pour l'effet de défilement infini
-  const [reviews, setReviews] = useState([...reviewsData, ...reviewsData, ...reviewsData]);
+  const [reviews, _setReviews] = useState([...reviewsData, ...reviewsData, ...reviewsData]);
   const [autoScroll, setAutoScroll] = useState(true);
 
   // Gérer la saisie de recherche
@@ -48,7 +42,8 @@ const CompanyReviewPage = () => {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [autoScroll, reviewsData.length]);
+   
+  }, [autoScroll]);
 
   // Mettre en pause le défilement automatique au survol
   const handleMouseEnter = () => setAutoScroll(false);

@@ -1,5 +1,5 @@
 // src/components/profile-setup/SkillsSelector.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const SkillsSelector = ({ availableSkills, selectedSkills, onChange, onBack }) => {
   const [searchTerm, setSearchTerm] = useState('');

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, MapPin, Briefcase, GraduationCap, Award, Save, Camera, AlertCircle } from 'lucide-react';
 import { updateUser } from '../redux/slices/authSlice';
 import userService from '../services/userService';
 
@@ -52,6 +51,7 @@ const ProfileSetupPage = () => {
 
   useEffect(() => {
     calculateCompleteness();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
   const calculateCompleteness = () => {
@@ -155,8 +155,8 @@ const ProfileSetupPage = () => {
             avatar: avatarUrl
           }
         }));
-        // eslint-disable-next-line no-unused-vars
-      } catch (err) {
+         
+      } catch (_err) {
         setError('Échec du téléchargement de l\'avatar');
       }
     }

@@ -1,5 +1,4 @@
 // src/components/profile-setup/ExperienceSelector.js
-import React from 'react';
 
 // TODO: Replace with API call to fetch experience levels from backend
 // Example implementation:

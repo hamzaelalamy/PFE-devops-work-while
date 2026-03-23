@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     fetchMarketOverview,
@@ -6,14 +6,12 @@ import {
     fetchTopSkills,
     fetchJobTrends
 } from '../redux/slices/analyticsSlice';
-import {
-    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-    PieChart, Pie, Cell, AreaChart, Area
-} from 'recharts';
-import { TrendingUp, Users, Briefcase, Building, Activity } from 'lucide-react';
+
+import { TrendingUp, Users, Briefcase, Building } from 'lucide-react';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 const StatCard = ({ title, value, icon: Icon, color }) => (
     <div className="bg-white p-6 rounded-lg shadow-md border-l-4" style={{ borderColor: color }}>
         <div className="flex justify-between items-start">

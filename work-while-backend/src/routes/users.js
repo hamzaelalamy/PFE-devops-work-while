@@ -1,7 +1,7 @@
 // routes/users.js
 const express = require('express');
 const userController = require('../controllers/userController');
-const { auth, authorize } = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 const { validate } = require('../middleware/validation');
 const { userValidators } = require('../utils/validators');
 

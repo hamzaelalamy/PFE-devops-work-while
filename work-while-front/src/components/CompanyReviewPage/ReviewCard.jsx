@@ -1,6 +1,3 @@
-import React from 'react';
-import { User } from 'lucide-react';
-import StarRating from './StarRating';
 
 const ReviewCard = ({ review, companyData }) => {
   return (

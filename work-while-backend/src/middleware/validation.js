@@ -1,4 +1,4 @@
-const Joi = require('joi');
+// const Joi = require('joi'); // Schemas are passed as parameters, Joi not needed here
 const { AppError } = require('../utils/helpers');
 
 const validate = (schema) => {

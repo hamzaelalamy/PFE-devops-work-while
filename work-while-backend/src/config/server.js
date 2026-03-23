@@ -17,7 +17,7 @@ const companyRoutes = require('./routes/companies');
 
 // Import des middlewares
 const { globalErrorHandler } = require('./middleware/errorHandler');
-const { auth } = require('./middleware/auth');
+const { auth: _auth } = require('./middleware/auth');
 
 const app = express();
 
@@ -188,6 +188,7 @@ const createIndexes = async () => {
 };
 
 // Gestion des signaux pour un arrêt propre
+let server; // Will be assigned by startServer()
 process.on('SIGTERM', () => {
   console.log('SIGTERM signal received: closing HTTP server');
   server.close(() => {

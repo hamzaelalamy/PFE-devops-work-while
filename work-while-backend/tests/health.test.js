@@ -1,3 +1,4 @@
+/* eslint-env jest */
 // Minimal smoke test for the health endpoint.
 // We mock heavy dependencies so tests stay fast and simple.
 

@@ -1,4 +1,3 @@
-import React from 'react';
 
 const IndustryCategories = () => {
     const categories = ['Technology', 'Healthcare', 'Finance', 'Education', 'Marketing', 'Design', 'Engineering', 'Customer Service'];

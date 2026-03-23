@@ -66,50 +66,57 @@ docker push $REGISTRY/workwhile-frontend:latest
 
 ### 2. Create Secrets
 
+In this project, **production secrets on EKS** are created automatically by the **GitHub Actions deploy workflow** (see `.github/workflows/ci-cd.yml`), which runs:
+
+```bash
+kubectl create namespace workwhile --dry-run=client -o yaml | kubectl apply -f -
+kubectl create secret generic workwhile-secrets -n workwhile \
+  --from-literal=JWT_SECRET="$JWT_SECRET" \
+  --from-literal=JWT_REFRESH_SECRET="$JWT_REFRESH_SECRET" \
+  --dry-run=client -o yaml | kubectl apply -f -
+```
+
+For **local clusters** (minikube/kind), you can create the Secret manually:
+
 ```bash
 kubectl create namespace workwhile
 
 kubectl create secret generic workwhile-secrets -n workwhile \
   --from-literal=JWT_SECRET=$(openssl rand -base64 32) \
-  --from-literal=JWT_REFRESH_SECRET=$(openssl rand -base64 32) \
-  --dry-run=client -o yaml | kubectl apply -f -
+  --from-literal=JWT_REFRESH_SECRET=$(openssl rand -base64 32)
 ```
-
-Or edit `k8s/secret.yaml` with your values and apply it.
 
 ### 3. Apply Manifests
 
-**Using kustomize (all at once):**
-
-```bash
-kubectl apply -k k8s/
-```
-
-**Or apply base directly:**
-
-```bash
-kubectl apply -k k8s/
-```
-
-**For EKS with ECR images:**
+**For EKS with ECR images (production path used in CI/CD):**
 
 ```bash
 kubectl apply -k k8s/overlays/ecr/
 ```
 
-**Or apply base resources individually:**
+**For local clusters (minikube/kind):**
 
 ```bash
-kubectl apply -f k8s/base/namespace.yaml
-kubectl apply -f k8s/base/secret.yaml
-kubectl apply -f k8s/base/configmap.yaml
-# ... and other files in k8s/base/
-kubectl apply -k k8s/  # or use base for all at once
+kubectl apply -k k8s/base/
 ```
 
 ### 4. Access the App
 
-**Option A: Ingress (minikube)**
+**Option A (EKS) – LoadBalancer Service (current production setup)**
+
+The `frontend` Service is of type `LoadBalancer`, so AWS creates an external URL:
+
+```bash
+kubectl get svc frontend -n workwhile
+```
+
+Open the value from the `EXTERNAL-IP` column in your browser:
+
+```text
+http://<EXTERNAL-IP>  # or the ELB hostname
+```
+
+**Option B: Ingress (minikube)**
 
 ```bash
 minikube addons enable ingress
@@ -118,14 +125,14 @@ minikube tunnel   # or: minikube ingress
 # Visit http://workwhile.local
 ```
 
-**Option B: Port forward (simplest)**
+**Option C: Port forward (simplest)**
 
 ```bash
 kubectl port-forward svc/frontend 8080:80 -n workwhile
 # Visit http://localhost:8080
 ```
 
-**Option C: NodePort**
+**Option D: NodePort**
 
 ```bash
 # Replace ClusterIP frontend service with NodePort variant
@@ -139,14 +146,14 @@ minikube service frontend -n workwhile  # Opens in browser
 |------|---------|
 | `base/` | Base Kustomization with all manifests |
 | `base/namespace.yaml` | Isolates WorkWhile in its own namespace |
-| `base/secret.yaml` | JWT secrets (sensitive) |
-| `base/configmap.yaml` | Non-sensitive config |
+| `base/configmap.yaml` | Non-sensitive config (URLs, env) |
 | `base/mongodb-*.yaml` | MongoDB deployment, service, PVC |
 | `base/backend-*.yaml` | Backend deployment, service, HPA, PVC |
-| `base/frontend-*.yaml` | Frontend deployment, service, HPA |
-| `base/ingress.yaml` | External access via Ingress controller |
-| `kustomization.yaml` | Root - references base |
-| `overlays/ecr/` | Overlay for ECR images (EKS deployment) |
+| `base/frontend-*.yaml` | Frontend deployment, service, HPA (type LoadBalancer) |
+| `base/fluent-bit-*.yaml` | Fluent Bit DaemonSet + ConfigMap for CloudWatch Logs |
+| `base/ingress.yaml` | Optional: external access via Ingress controller (for local clusters) |
+| `kustomization.yaml` | Root for base; references all base manifests |
+| `overlays/ecr/` | Overlay for ECR images and production EKS deployment |
 | `frontend-service-nodeport.yaml` | Optional: NodePort for local access |
 
 ## Update ConfigMap for Production

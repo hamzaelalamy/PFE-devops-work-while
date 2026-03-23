@@ -1,5 +1,5 @@
 // src/components/profile-setup/JobTitleSelector.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const JobTitleSelector = ({ availableTitles, selectedTitles, onChange, onBack }) => {
   const [localSelectedTitles, setLocalSelectedTitles] = useState(selectedTitles || []);

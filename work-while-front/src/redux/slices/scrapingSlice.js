@@ -228,7 +228,7 @@ const scrapingSlice = createSlice({
             .addCase(bulkApproveJobs.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(bulkApproveJobs.fulfilled, (state, action) => {
+            .addCase(bulkApproveJobs.fulfilled, (state, _action) => {
                 state.loading = false;
                 // Jobs are now published, refresh will remove them
             })
@@ -240,7 +240,7 @@ const scrapingSlice = createSlice({
             .addCase(bulkRejectJobs.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(bulkRejectJobs.fulfilled, (state, action) => {
+            .addCase(bulkRejectJobs.fulfilled, (state, _action) => {
                 state.loading = false;
                 // Jobs are deleted, refresh will remove them
             })

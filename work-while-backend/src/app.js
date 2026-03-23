@@ -2,7 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const helmet = require('helmet');
+// const helmet = require('helmet'); // Not used - CORS handled manually
 const compression = require('compression');
 const mongoSanitize = require('express-mongo-sanitize');
 const rateLimit = require('express-rate-limit');
@@ -238,7 +238,7 @@ console.log('⚠️  AUTH RATE LIMITING DISABLED FOR TESTING');
 // =====================================
 app.use(express.json({
   limit: process.env.MAX_JSON_SIZE || '10mb',
-  verify: (req, res, buf, encoding) => {
+  verify: (req, res, buf, _encoding) => {
     req.rawBody = buf;
   }
 }));
@@ -586,7 +586,7 @@ if (process.env.NODE_ENV !== 'test') {
 // =====================================
 
 // Handle unhandled promise rejections
-process.on('unhandledRejection', (err, promise) => {
+process.on('unhandledRejection', (err, _promise) => {
   logger.error('❌ Unhandled Promise Rejection:', err);
   console.log('Unhandled Promise Rejection. Shutting down...');
   server.close(() => {

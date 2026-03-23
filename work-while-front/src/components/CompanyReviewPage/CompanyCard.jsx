@@ -1,7 +1,5 @@
 
 // CompanyCard.jsx
-import React from 'react';
-import StarRating from './StarRating';
 
 const CompanyCard = ({ company }) => {
   return (

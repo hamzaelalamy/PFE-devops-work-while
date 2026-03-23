@@ -177,7 +177,7 @@ const authValidators = {
     
     profile: Joi.object({
       phone: Joi.string()
-        .pattern(/^\+?[\d\s\-\(\)]{10,}$/)
+        .pattern(/^\+?[\d\s\-()]{10,}$/)
         .allow('')
         .messages({
           'string.pattern.base': 'Please provide a valid phone number'

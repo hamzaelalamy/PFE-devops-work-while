@@ -327,7 +327,7 @@ export const STORAGE_KEYS = {
 // Form validation rules
 export const VALIDATION_RULES = {
     EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    PHONE: /^\+?[\d\s\-\(\)]{10,}$/,
+    PHONE: /^\+?[\d\s\-()]{10,}$/,
     PASSWORD: {
         MIN_LENGTH: 8,
         REGEX: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/

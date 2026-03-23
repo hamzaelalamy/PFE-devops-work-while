@@ -37,7 +37,7 @@ jobs:
 
       - name: Run backend lint
         working-directory: work-while-backend
-        run: npm run lint -- --max-warnings 99999
+        run: npm run lint -- --max-warnings 0
 
       - name: Install frontend dependencies
         working-directory: work-while-front
@@ -49,7 +49,7 @@ jobs:
 
       - name: Run frontend lint
         working-directory: work-while-front
-        run: npm run lint -- --max-warnings 99999
+        run: npm run lint -- --max-warnings 0
 
   build-and-push:
     needs: ci

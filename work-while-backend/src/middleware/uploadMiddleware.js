@@ -189,7 +189,7 @@ const getFileUrl = (filename, type) => {
 };
 
 // Middleware pour servir les fichiers statiques avec authentification
-const serveProtectedFile = (req, res, next) => {
+const serveProtectedFile = (req, res, _next) => {
   const { type, filename } = req.params;
   const allowedTypes = ['resumes', 'portfolios'];
   

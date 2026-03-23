@@ -8,6 +8,9 @@ on:
         required: false
         default: '0'
 
+env:
+  AWS_REGION: us-east-1
+
 jobs:
   rollback:
     runs-on: ubuntu-latest

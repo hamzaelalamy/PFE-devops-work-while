@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginUser } from '../redux/slices/authActions';
-import { clearError, loginSuccess, setLoading } from '../redux/slices/authSlice';
-import { Eye, EyeOff } from 'lucide-react';
+import { clearError, loginSuccess } from '../redux/slices/authSlice';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({

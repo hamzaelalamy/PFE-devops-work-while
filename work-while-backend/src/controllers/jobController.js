@@ -119,7 +119,7 @@ const getAllJobs = catchAsync(async (req, res, next) => {
 });
 
 // Obtenir tous les emplois pour l'admin (sans filtre de statut actif)
-const getAllJobsAdmin = catchAsync(async (req, res, next) => {
+const getAllJobsAdmin = catchAsync(async (req, res, _next) => {
   const jobs = await Job.find({})
     .populate('company', 'name')
     .populate('postedBy', 'firstName lastName')

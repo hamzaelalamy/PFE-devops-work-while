@@ -123,7 +123,7 @@ const createCompany = async (req, res) => {
     }
 
     // ✅ Validate phone format
-    const phoneRegex = /^[\+]?[\d\s\-\(\)]{10,}$/;
+    const phoneRegex = /^[+]?[\d\s\-()]{10,}$/;
     if (!phoneRegex.test(phone.trim())) {
       return res.status(400).json({
         status: 'fail',
@@ -202,7 +202,7 @@ const updateCompany = async (req, res) => {
 
     // ✅ Validate phone if provided
     if (req.body.phone) {
-      const phoneRegex = /^[\+]?[\d\s\-\(\)]{10,}$/;
+      const phoneRegex = /^[+]?[\d\s\-()]{10,}$/;
       if (!phoneRegex.test(req.body.phone.trim())) {
         return res.status(400).json({
           status: 'fail',

@@ -300,8 +300,8 @@ const applicationService = {
         if (personalInfo.totalExperience && isNaN(personalInfo.totalExperience)) {
           errors.push('Total experience must be a valid number');
         }
-        // eslint-disable-next-line no-unused-vars
-      } catch (e) {
+         
+      } catch (_e) {
         errors.push('Invalid personal information format');
       }
     }
@@ -327,8 +327,8 @@ const applicationService = {
         if (expectedSalary.currency && !validCurrencies.includes(expectedSalary.currency)) {
           errors.push(`Currency must be one of: ${validCurrencies.join(', ')}`);
         }
-        // eslint-disable-next-line no-unused-vars
-      } catch (e) {
+         
+      } catch (_e) {
         errors.push('Invalid expected salary format');
       }
     }

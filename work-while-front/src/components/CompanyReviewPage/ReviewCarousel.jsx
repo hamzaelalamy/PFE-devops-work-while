@@ -1,6 +1,4 @@
-import React, { useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import ReviewCard from './ReviewCard';
+import { useRef } from 'react';
 
 const ReviewCarousel = ({
                             reviews,

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcryptjs'); // User model handles hashing via pre-save hook
 
 // Load env vars
 dotenv.config({ path: path.join(__dirname, '../../.env') });
@@ -229,7 +229,7 @@ const seedDB = async () => {
         }
         console.log(`${createdUsers.length} users created...`);
 
-        const admin = createdUsers.find(u => u.role === 'admin');
+        const _admin = createdUsers.find(u => u.role === 'admin');
         const employer1 = createdUsers.find(u => u.email === 'employer1@example.com');
         const employer2 = createdUsers.find(u => u.email === 'employer2@example.com');
         const candidate1 = createdUsers.find(u => u.email === 'candidate1@example.com');

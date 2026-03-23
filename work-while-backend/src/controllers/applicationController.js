@@ -2,7 +2,7 @@
 
 const Application = require('../models/Application');
 const Job = require('../models/Job');
-const User = require('../models/User');
+const _User = require('../models/User');
 const { catchAsync, AppError, sendResponse } = require('../utils/helpers');
 const { sendApplicationMessage } = require('../services/sqsService');
 
@@ -229,7 +229,7 @@ const createApplication = catchAsync(async (req, res, next) => {
 // =====================================
 // OBTENIR MES CANDIDATURES
 // =====================================
-const getMyApplications = catchAsync(async (req, res, next) => {
+const getMyApplications = catchAsync(async (req, res, _next) => {
   console.log('\n📋 GET MY APPLICATIONS:');
   console.log('  User ID:', req.user._id);
   console.log('  User role:', req.user.role);
@@ -402,7 +402,7 @@ const withdrawApplication = catchAsync(async (req, res, next) => {
 // =====================================
 // OBTENIR LES STATISTIQUES DES CANDIDATURES
 // =====================================
-const getApplicationStats = catchAsync(async (req, res, next) => {
+const getApplicationStats = catchAsync(async (req, res, _next) => {
   console.log('\n📊 GET APPLICATION STATS:');
   console.log('  User ID:', req.user._id);
   console.log('  User role:', req.user.role);

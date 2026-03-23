@@ -1,5 +1,5 @@
 // ✅ FIXED: CreateJobPage.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import jobService from '../services/jobService';
@@ -69,8 +69,8 @@ const CreateJobPage = () => {
             try {
                 const userCompany = await companyService.getMyCompany();
                 setCompany(userCompany);
-                // eslint-disable-next-line no-unused-vars
-            } catch (err) {
+                 
+            } catch (_err) {
                 console.log('No company found for user');
                 setShowCompanyForm(true);
             }

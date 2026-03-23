@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 
 const NotFoundPage = () => {
     const titleRef = useRef(null);

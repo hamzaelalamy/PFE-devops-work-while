@@ -1,13 +1,12 @@
-/* eslint-disable no-unused-vars */
+ 
 import { useEffect, useState, useRef } from 'react';
-import { User, Bell, Heart, Menu, X } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../redux/slices/authActions';
 import logo from '../../../public/workwhile.png';
 
 export default function Navbar() {
-  const { user, isAuthenticated, loading } = useSelector(state => state.auth);
+  const { user, isAuthenticated } = useSelector(state => state.auth);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();

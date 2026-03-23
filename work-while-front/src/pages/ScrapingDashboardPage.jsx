@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     triggerScraping,
@@ -10,7 +10,6 @@ import {
     bulkRejectJobs,
     clearStatus
 } from '../redux/slices/scrapingSlice';
-import { Play, Check, X, RefreshCw, Database } from 'lucide-react';
 
 const ScrapingDashboardPage = () => {
     const dispatch = useDispatch();
