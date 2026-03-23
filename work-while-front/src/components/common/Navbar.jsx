@@ -1,7 +1,8 @@
  
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { Bell, Heart, Menu, User, X } from 'lucide-react';
 import { logoutUser } from '../../redux/slices/authActions';
 import logo from '../../../public/workwhile.png';
 

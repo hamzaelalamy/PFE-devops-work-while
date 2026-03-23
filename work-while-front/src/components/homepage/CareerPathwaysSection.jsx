@@ -1,4 +1,11 @@
 import { forwardRef } from 'react';
+import {
+  ArrowRight,
+  BookOpen,
+  BriefcaseBusiness,
+  Code,
+  LineChart,
+} from 'lucide-react';
 
 const careerPathways = [
   {

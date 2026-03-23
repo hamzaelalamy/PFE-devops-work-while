@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import { Award, Calendar, Users } from 'lucide-react';
 
 const FeaturesSection = forwardRef(({ isVisible }, ref) => {
   return (

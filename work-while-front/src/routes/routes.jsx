@@ -1,8 +1,29 @@
 // src/routes/routes.jsx
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import store from '../redux/store';
 import { checkAuthState } from '../redux/slices/authActions';
+import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
+import ScrollToTop from '../components/common/ScrollToTop';
+import LandingPage from '../pages/LandingPage';
+import JobListingsPage from '../pages/JobListingsPage';
+import JobDetailsPage from '../pages/JobDetailsPage';
+import CompanyReviewPage from '../pages/CompanyReviewPage';
+import CompanyDetailsPage from '../pages/CompanyDetailsPage';
+import Loginpage from '../pages/Loginpage';
+import RegisterPage from '../pages/RegisterPage';
+import DashboardPage from '../pages/DashboardPage';
+import JobApplicationPage from '../pages/JobApplicationPage';
+import CreateJobPage from '../pages/CreateJobPage';
+import ScrapingDashboardPage from '../pages/ScrapingDashboardPage';
+import AnalyticsDashboardPage from '../pages/AnalyticsDashboardPage';
+import ManageUsersPage from '../pages/ManageUsersPage';
+import ManageJobsPage from '../pages/ManageJobsPage';
+import ManageCompaniesPage from '../pages/ManageCompaniesPage';
+import NotFoundPage from '../pages/NotFoundPage';
+import ProfileSetupPage from '../pages/ProfileSetupPage';
 
 // Layout Components
 
@@ -22,6 +43,9 @@ const LoadingSpinner = () => (
         </div>
     </div>
 );
+
+// Reuse existing profile setup page for /profile route
+const ProfilePage = ProfileSetupPage;
 
 // Protected Route Component
 const ProtectedRoute = ({ children, requiredRole = null, redirectTo = '/login' }) => {
