@@ -300,7 +300,7 @@ export default function JobListingsPage({ showMyApplications = false }) {
             </div>
 
             {/* AI Smart Search Toggle */}
-            <div className="mt-2 flex items-center gap-2">
+            {/* <div className="mt-2 flex items-center gap-2">
               <button
                 onClick={() => setSmartSearch(!smartSearch)}
                 className={`text-xs px-2 py-1 rounded-full border transition-colors flex items-center gap-1 ${smartSearch ? 'bg-purple-100 border-purple-300 text-purple-700' : 'bg-gray-50 border-gray-200 text-gray-500'}`}
@@ -309,7 +309,7 @@ export default function JobListingsPage({ showMyApplications = false }) {
                 AI Smart Search {smartSearch ? 'ON' : 'OFF'}
               </button>
               {smartSearch && <span className="text-xs text-purple-600 italic">Finding jobs by meaning...</span>}
-            </div>
+            </div> */}
           </div>
 
           {/* Mobile Filter Toggle */}
